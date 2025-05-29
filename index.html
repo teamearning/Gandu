@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anxt Ai- Ultimate</title>
+
+  <!-- FontAwesome & Tailwind -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Particle Animation -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'El Messiri', sans-serif;
+      background: linear-gradient(135deg, #0f0f1a, #1a1a2e);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    #particles-js {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.6;
+    }
+
+    .glass-container {
+      background: rgba(25, 28, 50, 0.7);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .glass-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.7);
+    }
+
+    .highlight {
+      background: linear-gradient(90deg, #ffcc00, #ff8c00);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight: bold;
+      text-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+    }
+
+    .period-box {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      padding: 12px 20px;
+      border-radius: 12px;
+      display: inline-block;
+      font-size: 1.2rem;
+      font-weight: bold;
+      text-shadow: 0 0 10px rgba(37, 117, 252, 0.5);
+      margin: 10px 0;
+      box-shadow: 0 4px 15px rgba(106, 17, 203, 0.4);
+    }
+
+    .animated-btn {
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      padding: 12px 30px;
+      border-radius: 12px;
+      color: white;
+      font-weight: bold;
+      display: inline-block;
+      margin: 20px 0;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 4px 15px rgba(37, 117, 252, 0.4);
+      border: none;
+      font-size: 1.1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .animated-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(37, 117, 252, 0.6);
+    }
+
+    .animated-btn:active {
+      transform: translateY(1px);
+    }
+
+    .animated-btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .animated-btn:hover::after {
+      left: 100%;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .prediction-badge {
+      display: inline-block;
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin: 5px 0;
+    }
+
+    .big-badge {
+      background: linear-gradient(135deg, #00b09b, #96c93d);
+      box-shadow: 0 4px 15px rgba(0, 176, 155, 0.3);
+    }
+
+    .small-badge {
+      background: linear-gradient(135deg, #ff416c, #ff4b2b);
+      box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
+    }
+
+    .pending-badge {
+      background: linear-gradient(135deg, #4b6cb7, #182848);
+      box-shadow: 0 4px 15px rgba(75, 108, 183, 0.3);
+    }
+
+    .chance-meter {
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .chance-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, #4ade80, #3b82f6);
+      transition: width 0.5s ease;
+    }
+
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(74, 222, 128, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(74, 222, 128, 0); }
+    }
+
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+    .online {
+      background: #4ade80;
+      box-shadow: 0 0 10px #4ade80;
+    }
+
+    .offline {
+      background: #f87171;
+      box-shadow: 0 0 10px #f87171;
+    }
+
+    .floating {
+      animation: floating 3s ease-in-out infinite;
+    }
+
+    @keyframes floating {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    /* New history item styles */
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 15px;
+      margin: 8px 0;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      transition: all 0.3s ease;
+    }
+
+    .history-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateX(5px);
+    }
+
+    .history-period {
+      font-family: monospace;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+
+    .history-prediction {
+      font-weight: bold;
+      margin-top: 4px;
+    }
+
+    .big-prediction {
+      color: #4ade80;
+    }
+
+    .small-prediction {
+      color: #f87171;
+    }
+
+    .history-time {
+      font-size: 0.8rem;
+      color: #777;
+      margin-top: 2px;
+    }
+
+    .history-confidence {
+      text-align: right;
+    }
+
+    .confidence-value {
+      font-weight: bold;
+      color: #3b82f6;
+    }
+
+    .confidence-label {
+      font-size: 0.7rem;
+      color: #777;
+      margin-top: 2px;
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .history-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .history-action-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.8rem;
+    }
+
+    .history-action-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .empty-history {
+      text-align: center;
+      padding: 20px;
+      color: #aaa;
+      font-style: italic;
+    }
+
+    .remove-btn {
+      color: #f87171;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .history-item:hover .remove-btn {
+      opacity: 1;
+    }
+
+    /* Tabs styling */
+    .tabs {
+      display: flex;
+      margin-bottom: 15px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .tab {
+      padding: 8px 15px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .tab.active {
+      border-bottom: 2px solid #3b82f6;
+      color: #3b82f6;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+
+  <script>
+    function checkInternet() {
+      if (!navigator.onLine) {
+        history.back();
+      }
+    }
+
+    window.addEventListener("load", checkInternet);
+    window.addEventListener("offline", checkInternet);
+  </script>
+
+</head>
+<body>
+
+  <!-- Particle Background -->
+  <div id="particles-js"></div>
+
+  <!-- Header -->
+  <header class="w-full text-center py-6">
+    <div class="glass-container floating" style="max-width: 300px;">
+      <h1 class="text-3xl font-bold highlight">
+        <i class="fas fa-robot mr-2"></i> ANXT <span class="text-blue-400">AI</span>
+      </h1>
+      <div class="flex justify-center items-center mt-2">
+        <span class="status-indicator online"></span>
+        <span class="text-sm text-gray-300">AI System Online</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Period & Timer -->
+  <div class="glass-container animate-fade-in">
+    <h2 class="text-lg font-semibold text-gray-300">
+      <i class="fas fa-clock text-blue-400 mr-2"></i> Current Period
+    </h2>
+    <p id="period" class="period-box">Loading...</p>
+    <div class="flex justify-center items-center mt-3">
+      <i class="fas fa-hourglass-half text-yellow-400 mr-2"></i>
+      <span id="timer" class="text-xl font-mono">00:00</span>
+    </div>
+  </div>
+
+  <!-- Current Prediction -->
+  <div class="glass-container animate-fade-in" style="animation-delay: 0.2s;">
+    <h2 class="text-lg font-semibold text-gray-300">
+      <i class="fas fa-magic text-purple-400 mr-2"></i> AI Prediction
+    </h2>
+    <div id="prediction-container" class="mt-3">
+      <div id="prediction-badge" class="prediction-badge pending-badge">
+        <i class="fas fa-spinner fa-spin mr-2"></i> Analyzing...
+      </div>
+      <div class="mt-3">
+        <div class="flex justify-between text-sm text-gray-400">
+          <span>Confidence Level:</span>
+          <span id="chance">--%</span>
+        </div>
+        <div class="chance-meter">
+          <div id="chance-fill" class="chance-fill" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- New Prediction History -->
+  <div class="glass-container animate-fade-in" style="animation-delay: 0.4s;">
+    <div class="history-header">
+      <h2 class="text-lg font-semibold text-gray-300">
+        <i class="fas fa-history text-blue-400 mr-2"></i> Prediction History
+      </h2>
+      <div class="history-actions">
+        <button class="history-action-btn" onclick="clearAllHistory()">
+          <i class="fas fa-trash-alt mr-1"></i> Clear All
+        </button>
+        <button class="history-action-btn" onclick="refreshHistory()">
+          <i class="fas fa-sync-alt mr-1"></i> Refresh
+        </button>
+      </div>
+    </div>
+    
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('today')">Today</div>
+      <div class="tab" onclick="switchTab('week')">This Week</div>
+      <div class="tab" onclick="switchTab('all')">All Time</div>
+    </div>
+    
+    <div id="today-tab" class="tab-content active">
+      <div class="mt-3 max-h-60 overflow-y-auto pr-2">
+        <ul id="todayHistoryList" class="space-y-2"></ul>
+        <div id="emptyToday" class="empty-history">
+          <i class="fas fa-spinner fa-spin"></i> Loading today's predictions...
+        </div>
+      </div>
+    </div>
+    
+    <div id="week-tab" class="tab-content">
+      <div class="mt-3 max-h-60 overflow-y-auto pr-2">
+        <ul id="weekHistoryList" class="space-y-2"></ul>
+        <div id="emptyWeek" class="empty-history">
+          No predictions this week yet
+        </div>
+      </div>
+    </div>
+    
+    <div id="all-tab" class="tab-content">
+      <div class="mt-3 max-h-60 overflow-y-auto pr-2">
+        <ul id="allHistoryList" class="space-y-2"></ul>
+        <div id="emptyAll" class="empty-history">
+          No historical predictions available
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Refresh Button -->
+  <button class="animated-btn animate-fade-in" style="animation-delay: 0.6s;" onclick="window.location.reload();">
+    <i class="fas fa-sync-alt mr-2"></i> Refresh Data
+  </button>
+
+  <script>
+    // New prediction history system
+    const predictionHistory = {
+      today: [],
+      week: [],
+      all: []
+    };
+    
+    let lastPeriod = null;
+    
+    function updatePeriodAndTimer() {
+      const now = new Date();
+      const seconds = now.getUTCSeconds();
+      const remainingSeconds = 60 - seconds;
+      const totalMinutes = now.getUTCHours() * 60 + now.getUTCMinutes();
+
+      // Format period number
+      const periodNumber = `${now.getUTCFullYear()}${(now.getUTCMonth() + 1).toString().padStart(2, '0')}${now.getUTCDate().toString().padStart(2, '0')}-${(10000 + totalMinutes)}`;
+      
+      document.getElementById("period").textContent = periodNumber;
+      document.getElementById("timer").textContent = `00:${remainingSeconds.toString().padStart(2, '0')}`;
+
+      if (lastPeriod !== periodNumber) {
+        lastPeriod = periodNumber;
+        updatePredictionUI("pending");
+        
+        // Simulate AI analysis delay
+        setTimeout(() => {
+          generatePrediction(periodNumber);
+        }, 2000 + Math.random() * 2000); // Random delay between 2-4 seconds
+      }
+    }
+
+    function updatePredictionUI(status, prediction = null, chance = null) {
+      const predictionBadge = document.getElementById("prediction-badge");
+      const chanceElement = document.getElementById("chance");
+      const chanceFill = document.getElementById("chance-fill");
+      
+      if (status === "pending") {
+        predictionBadge.className = "prediction-badge pending-badge";
+        predictionBadge.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Analyzing...';
+        chanceElement.textContent = "--%";
+        chanceFill.style.width = "0%";
+      } else if (status === "result") {
+        const badgeClass = prediction === "Big" ? "big-badge" : "small-badge";
+        predictionBadge.className = `prediction-badge ${badgeClass} pulse`;
+        predictionBadge.innerHTML = `<i class="fas fa-${prediction === "Big" ? "arrow-up" : "arrow-down"} mr-2"></i> ${prediction}`;
+        chanceElement.textContent = `${chance}%`;
+        chanceFill.style.width = `${chance}%`;
+      }
+    }
+
+    function generatePrediction(periodNumber) {
+      // Generate random prediction (60% chance for Big, 40% for Small for more realistic distribution)
+      const prediction = Math.random() < 0.6 ? "Big" : "Small";
+      
+      // Generate confidence level (75-95% for more realistic values)
+      const chance = Math.floor(Math.random() * 21) + 75;
+      
+      updatePredictionUI("result", prediction, chance);
+      
+      // Add to history with realistic timestamp
+      addToHistory(periodNumber, prediction, chance);
+    }
+
+    function addToHistory(period, prediction, chance) {
+      const now = new Date();
+      const historyItem = {
+        id: Date.now(),
+        period: period,
+        prediction: prediction,
+        chance: chance,
+        timestamp: now.getTime(),
+        date: formatDate(now),
+        time: formatTime(now)
+      };
+      
+      // Add to today's history
+      predictionHistory.today.unshift(historyItem);
+      
+      // Add to week's history if within current week
+      const oneWeekAgo = new Date();
+      oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+      if (now > oneWeekAgo) {
+        predictionHistory.week.unshift(historyItem);
+      }
+      
+      // Always add to all history
+      predictionHistory.all.unshift(historyItem);
+      
+      // Save to localStorage
+      saveHistoryToStorage();
+      
+      // Update UI
+      updateHistoryUI();
+    }
+    
+    function formatDate(date) {
+      return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+    }
+    
+    function formatTime(date) {
+      return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+    }
+    
+    function createHistoryItem(item) {
+      const li = document.createElement("li");
+      li.className = "history-item";
+      li.setAttribute("data-id", item.id);
+      li.innerHTML = `
+        <div>
+          <div class="history-period">${item.period}</div>
+          <div class="history-prediction ${item.prediction === 'Big' ? 'big-prediction' : 'small-prediction'}">
+            ${item.prediction}
+          </div>
+          <div class="history-time">${item.date} ${item.time}</div>
+        </div>
+        <div class="history-confidence">
+          <div class="confidence-value">${item.chance}%</div>
+          <div class="confidence-label">confidence</div>
+          <button class="remove-btn" onclick="removeHistoryItem('${item.id}', event)">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      `;
+      return li;
+    }
+    
+    function updateHistoryUI() {
+      updateHistoryTab('today');
+      updateHistoryTab('week');
+      updateHistoryTab('all');
+    }
+    
+    function updateHistoryTab(tabName) {
+      const listElement = document.getElementById(`${tabName}HistoryList`);
+      const emptyElement = document.getElementById(`empty${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`);
+      
+      listElement.innerHTML = '';
+      
+      if (predictionHistory[tabName].length === 0) {
+        emptyElement.style.display = 'block';
+      } else {
+        emptyElement.style.display = 'none';
+        
+        // Show only the first 20 items to prevent performance issues
+        const itemsToShow = tabName === 'all' ? 
+          predictionHistory[tabName].slice(0, 50) : 
+          predictionHistory[tabName].slice(0, 20);
+          
+        itemsToShow.forEach(item => {
+          listElement.appendChild(createHistoryItem(item));
+        });
+      }
+    }
+    
+    function removeHistoryItem(id, event) {
+      event.stopPropagation();
+      
+      // Remove from all history arrays
+      ['today', 'week', 'all'].forEach(tab => {
+        predictionHistory[tab] = predictionHistory[tab].filter(item => item.id !== id);
+      });
+      
+      // Save to localStorage
+      saveHistoryToStorage();
+      
+      // Update UI
+      updateHistoryUI();
+    }
+    
+    function clearAllHistory() {
+      if (confirm("Are you sure you want to clear ALL prediction history? This cannot be undone.")) {
+        predictionHistory.today = [];
+        predictionHistory.week = [];
+        predictionHistory.all = [];
+        
+        // Save to localStorage
+        saveHistoryToStorage();
+        
+        // Update UI
+        updateHistoryUI();
+      }
+    }
+    
+    function refreshHistory() {
+      // Show loading state
+      document.getElementById('emptyToday').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Refreshing...';
+      document.getElementById('emptyWeek').style.display = 'none';
+      document.getElementById('emptyAll').style.display = 'none';
+      
+      // Simulate refresh delay
+      setTimeout(() => {
+        updateHistoryUI();
+      }, 1000);
+    }
+    
+    function switchTab(tabName) {
+      // Update tabs UI
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      
+      // Activate selected tab
+      document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
+      document.getElementById(`${tabName}-tab`).classList.add('active');
+    }
+    
+    function saveHistoryToStorage() {
+      try {
+        localStorage.setItem('anxtAiPredictionHistory', JSON.stringify(predictionHistory.all));
+      } catch (e) {
+        console.error("Failed to save history to localStorage", e);
+      }
+    }
+    
+    function loadHistoryFromStorage() {
+      try {
+        const savedHistory = localStorage.getItem('anxtAiPredictionHistory');
+        if (savedHistory) {
+          const allHistory = JSON.parse(savedHistory);
+          
+          // Filter into appropriate time periods
+          const now = new Date();
+          const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+          const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).getTime();
+          
+          predictionHistory.all = allHistory;
+          predictionHistory.today = allHistory.filter(item => item.timestamp >= todayStart);
+          predictionHistory.week = allHistory.filter(item => item.timestamp >= oneWeekAgo);
+        }
+      } catch (e) {
+        console.error("Failed to load history from localStorage", e);
+      }
+    }
+    
+    function generateSampleHistory() {
+      const now = new Date();
+      const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+      const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).getTime();
+      
+      // Generate sample data for the past week
+      for (let i = 0; i < 50; i++) {
+        const hoursAgo = Math.floor(Math.random() * 168); // Up to 1 week ago
+        const timestamp = now.getTime() - hoursAgo * 60 * 60 * 1000;
+        const date = new Date(timestamp);
+        
+        const periodNumber = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}-${(10000 + date.getHours() * 60 + date.getMinutes())}`;
+        const prediction = Math.random() < 0.6 ? "Big" : "Small";
+        const chance = Math.floor(Math.random() * 21) + 75;
+        
+        const historyItem = {
+          id: timestamp,
+          period: periodNumber,
+          prediction: prediction,
+          chance: chance,
+          timestamp: timestamp,
+          date: formatDate(date),
+          time: formatTime(date)
+        };
+        
+        predictionHistory.all.push(historyItem);
+        
+        if (timestamp >= todayStart) {
+          predictionHistory.today.push(historyItem);
+        }
+        
+        if (timestamp >= oneWeekAgo) {
+          predictionHistory.week.push(historyItem);
+        }
+      }
+      
+      // Sort all history by timestamp (newest first)
+      predictionHistory.all.sort((a, b) => b.timestamp - a.timestamp);
+      predictionHistory.today.sort((a, b) => b.timestamp - a.timestamp);
+      predictionHistory.week.sort((a, b) => b.timestamp - a.timestamp);
+      
+      saveHistoryToStorage();
+    }
+
+    // Initialize everything when page loads
+    window.onload = function() {
+      loadHistoryFromStorage();
+      
+      // If no history exists, generate sample data
+      if (predictionHistory.all.length === 0) {
+        generateSampleHistory();
+      }
+      
+      updateHistoryUI();
+      
+      setInterval(updatePeriodAndTimer, 1000);
+      updatePeriodAndTimer(); // Run immediately
+      
+      // Configure particles
+      particlesJS("particles-js", {
+        particles: {
+          number: { value: 80, density: { enable: true, value_area: 800 } },
+          color: { value: "#ffffff" },
+          shape: { type: "circle" },
+          opacity: { value: 0.5, random: true },
+          size: { value: 3, random: true },
+          line_linked: { enable: true, distance: 150, color: "#ffffff", opacity: 0.2, width: 1 },
+          move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+        },
+        interactivity: {
+          detect_on: "canvas",
+          events: {
+            onhover: { enable: true, mode: "grab" },
+            onclick: { enable: true, mode: "push" }
+          }
+        }
+      });
+    };
+  </script>
+
+</body>
+</html>
